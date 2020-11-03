@@ -83,7 +83,7 @@ def make_goal_checker(goal):
     def is_goal(state):
         # This code is used in the search process and may be called millions of times.
         for endgame in goal: # For every item in goal
-            if state[endgame] < goal[endgame]: # If current state contains less that goal value
+            if state[endgame] < goal[endgame]: # If current state contains less than goal value
                 return False # return false
         return True # Else we have goal value, return true
 

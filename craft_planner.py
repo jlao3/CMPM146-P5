@@ -137,8 +137,14 @@ def search(graph, state, is_goal, limit, heuristic):
                 current_state = past_state
             path.reverse() # reverse the path
             return path # and finally return it
-        
-        pass
+        for new_name, new_state, new_cost in graph(current_state): # Graph gives list of possible actions with 3 variables each
+            pathcost = current_cost + new_cost # Calculate cost
+            pathlen = steps[current_state] + 1 # Calculate length of path
+            if new_state not in costs or pathcost < costs[new_state]: # If not in point or costs less than pointer
+                costs[new_state] = current_cost + new_cost
+                steps[new_state] = pathlen
+                passed_states[new_state] = (current_state, (new_name, new_state, new_cost))
+                heappush(queue, (heuristic(new_state) + pathcost, new_state)) # Queue it using heauristic to determine cost, something like that
 
     # Failed to find a path
     print(time() - start_time, 'seconds.')
@@ -168,7 +174,7 @@ if __name__ == '__main__':
         effector = make_effector(rule)
         recipe = Recipe(name, checker, effector, rule['Time'])
         all_recipes.append(recipe)
-
+    
     # Create a function which checks for the goal
     is_goal = make_goal_checker(Crafting['Goal'])
 

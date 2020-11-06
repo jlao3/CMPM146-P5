@@ -90,7 +90,7 @@ def make_goal_checker(goal):
     return is_goal
 
 
-def graph(state):
+def graph(state): # GRAPH GENERATES POSSIBLE ACTION
     # Iterates through all recipes/rules, checking which are valid in the given state.
     # If a rule is valid, it returns the rule's name, the resulting state after application
     # to the given state, and the cost for the rule.

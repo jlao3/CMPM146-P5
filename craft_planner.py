@@ -111,7 +111,33 @@ def search(graph, state, is_goal, limit, heuristic):
     # When you find a path to the goal return a list of tuples [(state, action)]
     # representing the path. Each element (tuple) of the list represents a state
     # in the path and the action that took you to this state
+    
+    path = [] # List of tuples
+
+    passed_states = {}
+    passed_states[state] = None
+
+    costs = {}
+    costs[state] = 0
+
+    steps = {}
+    steps[state] = 0
+
+    queue = [(0, state)]
+
     while time() - start_time < limit:
+        current_cost, current_state = heappop(queue)
+        if is_goal(current_state): # If we have the goal (IS_GOAL IS A FUNCTION THAT CALLS MAKE_GOAL_CHECKER BTW)
+            print("Time:", (time() - start_time)) # Print statistics
+            print("Cost:", costs[current_state])
+            print("Len:", steps[current_state])
+            while passed_states[current_state]: # While out list of past actions is not None
+                past_state, past_action = passed_states[current_state]
+                path.append((current_state, past_action)) # Insert into path list
+                current_state = past_state
+            path.reverse() # reverse the path
+            return path # and finally return it
+        
         pass
 
     # Failed to find a path

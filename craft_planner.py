@@ -114,13 +114,16 @@ def heuristic(state):
     #check if the tool required is already made (unfinished)
         #go through every tool
         #if state has one & has more than one return infinity
-    for recipe in Crafting['Recipes'].items():
-        if 'Requires' in recipe[1]:
-            x = recipe[1]['Requires']
-            for tool in x:
-                if state[tool] > 1:
-                    return float('inf')
-
+    #for recipe in Crafting['Recipes'].items():
+        #if 'Requires' in recipe[1]:
+            #x = recipe[1]['Requires']
+            #for tool in x:
+                #if state[tool] > 1:
+                    #return float('inf')
+                    
+    if state['bench'] > 1 or state['wooden_axe'] > 1 or state['wooden_pickaxe'] > 1 or state['stone_axe'] > 1 or state['stone_pickaxe'] > 1 or state['iron_axe'] > 1 or state['iron_pickaxe'] > 1:
+        return float('inf')
+    
     #make sure to use the best tool available
 
 

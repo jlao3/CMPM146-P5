@@ -100,7 +100,37 @@ def graph(state): # GRAPH GENERATES POSSIBLE ACTION
 
 
 def heuristic(state):
-    # Implement your heuristic here!
+
+    #print("State: ", state)
+    #print(Crafting['Goal'])
+    #state inside of heuristic is possible new state
+
+    #use negative numbers to prioritize one thing over another
+
+    #for absolute cases like need to be done first:
+        #return float('-inf')
+        #return float('inf')
+
+    #check if the tool required is already made (unfinished)
+        #go through every tool
+        #if state has one & has more than one return infinity
+    for recipe in Crafting['Recipes'].items():
+        if 'Requires' in recipe[1]:
+            x = recipe[1]['Requires']
+            for tool in x:
+                if state[tool] > 1:
+                    return float('inf')
+
+    #make sure to use the best tool available
+
+
+    #don't make more items than needed
+
+    #craft benches and furnaces if more efficient
+
+    #use goal to find how much of each material needed then don't stop making it until reached the amount needed
+        #once reached that amount do all of the smelting/turning wood into planks at the end
+
     return 0
 
 def search(graph, state, is_goal, limit, heuristic):
@@ -183,7 +213,7 @@ if __name__ == '__main__':
     state.update(Crafting['Initial'])
 
     # Search for a solution
-    resulting_plan = search(graph, state, is_goal, 5, heuristic)
+    resulting_plan = search(graph, state, is_goal, 30, heuristic)
 
     if resulting_plan:
         # Print resulting plan

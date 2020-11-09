@@ -113,24 +113,15 @@ def heuristic(state):
 
     #check if the tool required is already made (unfinished)
         #go through every tool
-        #if state has one & has more than one return infinity
-    #for recipe in Crafting['Recipes'].items():
-        #if 'Requires' in recipe[1]:
-            #x = recipe[1]['Requires']
-            #for tool in x:
-                #if state[tool] > 1:
-                    #return float('inf')
-                    
+        #if state has one & has more than one return infinity                   
     if state['bench'] > 1 or state['wooden_axe'] > 1 or state['wooden_pickaxe'] > 1 or state['stone_axe'] > 1 or state['stone_pickaxe'] > 1 or state['iron_axe'] > 1 or state['iron_pickaxe'] > 1:
         return float('inf')
     
     #make sure to use the best tool available
 
-
     #don't make more items than needed
-
-    #craft benches and furnaces if more efficient
-
+    if state['plank'] > 8 or state['wood'] > 4 or state['ore'] > 12 or state['ingot'] > 12 or state['cobble'] > 8 or state['stick'] > 8 or state['coal'] > 12:
+            return float('inf')
     #use goal to find how much of each material needed then don't stop making it until reached the amount needed
         #once reached that amount do all of the smelting/turning wood into planks at the end
 
@@ -215,8 +206,46 @@ if __name__ == '__main__':
     state = State({key: 0 for key in Crafting['Items']})
     state.update(Crafting['Initial'])
 
+
+    #find the exact base materials needed to create the final product
+    basic_materials = ['wood', 'cobble', 'ore', 'coal']
+    required_materials = []
+
+    for item in Crafting['Goal'].items():
+        print("Goal Item: ", item)
+        for recipe in Crafting['Recipes'].items():
+            print("Recipe: ", recipe)
+            
+            #LINES BELOW AREN'T WORKING YET
+
+            if item in recipe['Produces'].items():
+                for mat in recipe['Consumes'].items():
+                    required_materials.append(mat)
+    #break down the required materials even further
+        #ex iron pickaxe -> 2 sticks 3 ingots 1 bench
+            #break down into 3 ore, 2 planks, 1 furnace, 1 bench
+
+    #WIP
+    #add 3 wood, 11 cobble, 3 ore, 3 coal for pickaxes, bench, furnaces
+    '''
+    x = True
+    while x:
+        for item in required_materials:
+            if item not in basic_materials:
+                for recipe in Crafting['Recipes'].items():
+                    if item in recipe['Produces'].items():
+                        for mat in recipe['Consumes'].items():
+                            if mat in required_materials:
+                                for elem in required_materials:
+                                    if elem == mat:
+                                        elem[1] += mat[1]
+                            else:
+                                required_materials.append(mat)
+    '''
+
+
     # Search for a solution
-    resulting_plan = search(graph, state, is_goal, 30, heuristic)
+    resulting_plan = search(graph, state, is_goal, 1, heuristic)
 
     if resulting_plan:
         # Print resulting plan

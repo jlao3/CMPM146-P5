@@ -171,7 +171,7 @@ def search(graph, state, is_goal, limit, heuristic):
             pathcost = current_cost + new_cost # Calculate cost
             pathlen = steps[current_state] + 1 # Calculate length of path
             if new_state not in costs or pathcost < costs[new_state]: # If not in point or costs less than pointer
-                costs[new_state] = current_cost + new_cost
+                costs[new_state] = pathcost
                 steps[new_state] = pathlen
                 passed_states[new_state] = (current_state, (new_name, new_state, new_cost))
                 heappush(queue, (heuristic(new_name, new_state) + pathcost, new_state)) # Queue it using heauristic to determine cost, something like that
@@ -251,11 +251,7 @@ if __name__ == '__main__':
 
 
     # Search for a solution
-<<<<<<< HEAD
-    resulting_plan = search(graph, state, is_goal, 5, heuristic)
-=======
     resulting_plan = search(graph, state, is_goal, 1, heuristic)
->>>>>>> 5605e59294ba99341c3c5595727c22758d9a6408
 
     if resulting_plan:
         # Print resulting plan

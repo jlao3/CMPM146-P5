@@ -1,0 +1,8 @@
+README
+Justin Lao & Elijah Rossman
+
+For our search approach we decided upon a basic A* algorithm. Through our use of a priority queue we decided which states we should check and which ones aren't worth searching. We considered each new state and if we recieved a duplicate state we would choose the one with the lower cost.
+
+For our heuristic we started by breaking down the problem into more digestible terms. We found that by limiting the amount of wood, ore, and coal to just 1 our algorithm would be forced to smelt or make planks. This eliminated a lot of cases where the algorithm would search many cases that eventually led to the same result. We also limited the amount of each tool to just 1 because making anymore would be inefficient.
+
+I hope you have a nice day! :)

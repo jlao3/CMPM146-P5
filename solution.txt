@@ -1,6 +1,7 @@
 Time: 29.872998061999997
 Cost: 1671
 Len: 654
+States Visited: 904959
          {'wood': 1}
 ('punch for wood', State([('bench', 0), ('cart', 0), ('coal', 0), ('cobble', 0), ('furnace', 0), ('ingot', 0), ('iron_axe', 0), ('iron_pickaxe', 0), ('ore', 0), ('plank', 0), ('rail', 0), ('stick', 0), ('stone_axe', 0), ('stone_pickaxe', 0), ('wood', 1), ('wooden_axe', 0), ('wooden_pickaxe', 0)]), 4)
          {'plank': 4}

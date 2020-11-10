@@ -134,6 +134,8 @@ def search(graph, state, is_goal, limit, heuristic):
 
     queue = [(0, state)]
 
+    states = 0
+
     # Standard A*
     while time() - start_time < limit:
         current_cost, current_state = heappop(queue)
@@ -141,6 +143,7 @@ def search(graph, state, is_goal, limit, heuristic):
             print("Time:", (time() - start_time)) # Print statistics
             print("Cost:", costs[current_state])
             print("Len:", steps[current_state])
+            print("States: ", states)
             while passed_states[current_state]: # While out list of past actions is not None
                 past_state, past_action = passed_states[current_state]
                 path.append((current_state, past_action)) # Insert into path list
@@ -151,11 +154,11 @@ def search(graph, state, is_goal, limit, heuristic):
             pathcost = current_cost + new_cost # Calculate cost
             pathlen = steps[current_state] + 1 # Calculate length of path
             if new_state not in costs or pathcost < costs[new_state]: # If not in point or costs less than pointer
+                states += 1
                 costs[new_state] = pathcost
                 steps[new_state] = pathlen
                 passed_states[new_state] = (current_state, (new_name, new_state, new_cost))
                 heappush(queue, (heuristic(new_state) + pathcost, new_state)) # Queue it using heauristic to determine cost, something like that
-
     # Failed to find a path
     print(time() - start_time, 'seconds.')
     print("Failed to find a path from", state, 'within time limit.')

@@ -134,6 +134,7 @@ def search(graph, state, is_goal, limit, heuristic):
 
     queue = [(0, state)]
 
+    # Standard A*
     while time() - start_time < limit:
         current_cost, current_state = heappop(queue)
         if is_goal(current_state): # If we have the goal (IS_GOAL IS A FUNCTION THAT CALLS MAKE_GOAL_CHECKER BTW)

@@ -99,37 +99,16 @@ def graph(state): # GRAPH GENERATES POSSIBLE ACTION
             yield (r.name, r.effect(state), r.cost)
 
 
-def heuristic(action_name, state):
+def heuristic(state):
 
-    #print("State: ", state)
-    #print(Crafting['Goal'])
-    #state inside of heuristic is possible new state
-
-    #use negative numbers to prioritize one thing over another
-
-    #for absolute cases like need to be done first:
-        #return float('-inf')
-        #return float('inf')
-
-    #check if the tool required is already made (unfinished)
-        #go through every tool
-        #if state has one & has more than one return infinity                   
-    if state['cart'] > 1 or state['bench'] > 1 or state['wooden_axe'] > 0 or state['wooden_pickaxe'] > 1 or state['stone_axe'] > 0 or state['stone_pickaxe'] > 1 or state['iron_axe'] > 0 or state['iron_pickaxe'] > 1:
-        return float('inf')
-             
-    current_recipe = Crafting['Recipes'][action_name]
-    if 'Requires' in current_recipe:
-        for tool in current_recipe['Requires']:
-                if state[tool] > 1:
-                    return float('inf')
-    
-    #make sure to use the best tool available
-
-    #don't make more items than needed or unnecessary items
-    if state['plank'] > 6 or state['wood'] > 1 or state['ore'] > 1 or state['ingot'] > 6 or state['cobble'] > 8 or state['stick'] > 5 or state['coal'] > 1:
+    # Check if you have best amount of basic materials
+    # Force the bot to immediately take the path that consumes a single wood, ore, or coal
+    if state['wood'] > 1 or state['plank'] > 6 or state['stick'] > 5 or state['ore'] > 1 or state['ingot'] > 6 or state['cobble'] > 8 or state['coal'] > 1:
             return float('inf')
-    #use goal to find how much of each material needed then don't stop making it until reached the amount needed
-        #once reached that amount do all of the smelting/turning wood into planks at the end
+
+    # Check if you have required tools
+    if state['wooden_axe'] > 0 or state['wooden_pickaxe'] > 1 or state['stone_axe'] > 0 or state['stone_pickaxe'] > 1 or state['iron_axe'] > 0 or state['iron_pickaxe'] > 1 or state['furnace'] > 1 or state['cart'] > 1 or state['bench'] > 1:
+        return float('inf')
 
     return 0
 
@@ -174,7 +153,7 @@ def search(graph, state, is_goal, limit, heuristic):
                 costs[new_state] = pathcost
                 steps[new_state] = pathlen
                 passed_states[new_state] = (current_state, (new_name, new_state, new_cost))
-                heappush(queue, (heuristic(new_name, new_state) + pathcost, new_state)) # Queue it using heauristic to determine cost, something like that
+                heappush(queue, (heuristic(new_state) + pathcost, new_state)) # Queue it using heauristic to determine cost, something like that
 
     # Failed to find a path
     print(time() - start_time, 'seconds.')
@@ -211,47 +190,6 @@ if __name__ == '__main__':
     # Initialize first state from initial inventory
     state = State({key: 0 for key in Crafting['Items']})
     state.update(Crafting['Initial'])
-
-    '''
-    #find the exact base materials needed to create the final product
-    basic_materials = ['wood', 'cobble', 'ore', 'coal']
-    required_materials = []
-
-    for item in Crafting['Goal'].items():
-        #print("Goal Item: ", item)
-        for recipe in Crafting['Recipes'].items():
-            #print("Recipe: ", recipe)
-            
-            #LINES BELOW AREN'T WORKING YET
-
-            if item in recipe['Produces'].items():
-                for mat in recipe['Consumes'].items():
-                    required_materials.append(mat)
-    #break down the required materials even further
-        #ex iron pickaxe -> 2 sticks 3 ingots 1 bench
-            #break down into 3 ore, 2 planks, 1 furnace, 1 bench
-    
-    #WIP
-    #add 4 wood, 11 cobble, 3 ore, 3 coal for pickaxes, bench, furnaces
-
-
-    furnace: 8 cobble, 1 pickaxe (2 sticks and 3 planks), 2 wood
-    
-    x = True
-    while x:
-        for item in required_materials:
-            if item not in basic_materials:
-                for recipe in Crafting['Recipes'].items():
-                    if item in recipe['Produces'].items():
-                        for mat in recipe['Consumes'].items():
-                            if mat in required_materials:
-                                for elem in required_materials:
-                                    if elem == mat:
-                                        elem[1] += mat[1]
-                            else:
-                                required_materials.append(mat)
-    '''
-
 
     # Search for a solution
     resulting_plan = search(graph, state, is_goal, 30, heuristic)

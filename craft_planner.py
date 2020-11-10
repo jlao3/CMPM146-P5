@@ -99,7 +99,7 @@ def graph(state): # GRAPH GENERATES POSSIBLE ACTION
             yield (r.name, r.effect(state), r.cost)
 
 
-def heuristic(state):
+def heuristic(action_name, state):
 
     #print("State: ", state)
     #print(Crafting['Goal'])
@@ -116,6 +116,12 @@ def heuristic(state):
         #if state has one & has more than one return infinity                   
     if state['cart'] > 1 or state['bench'] > 1 or state['wooden_axe'] > 0 or state['wooden_pickaxe'] > 1 or state['stone_axe'] > 0 or state['stone_pickaxe'] > 1 or state['iron_axe'] > 0 or state['iron_pickaxe'] > 1:
         return float('inf')
+             
+    current_recipe = Crafting['Recipes'][action_name]
+    if 'Requires' in current_recipe:
+        for tool in current_recipe['Requires']:
+                if state[tool] > 1:
+                    return float('inf')
     
     #make sure to use the best tool available
 
@@ -165,10 +171,10 @@ def search(graph, state, is_goal, limit, heuristic):
             pathcost = current_cost + new_cost # Calculate cost
             pathlen = steps[current_state] + 1 # Calculate length of path
             if new_state not in costs or pathcost < costs[new_state]: # If not in point or costs less than pointer
-                costs[new_state] = current_cost + new_cost
+                costs[new_state] = pathcost
                 steps[new_state] = pathlen
                 passed_states[new_state] = (current_state, (new_name, new_state, new_cost))
-                heappush(queue, (heuristic(new_state) + pathcost, new_state)) # Queue it using heauristic to determine cost, something like that
+                heappush(queue, (heuristic(new_name, new_state) + pathcost, new_state)) # Queue it using heauristic to determine cost, something like that
 
     # Failed to find a path
     print(time() - start_time, 'seconds.')
